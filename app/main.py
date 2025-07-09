@@ -1,50 +1,75 @@
-# app/main.py
+# main.py
+
 from fastapi import FastAPI
 from pydantic import BaseModel
-from .analyzer import AnalysisResult, get_sentences, annotate_adverbs, annotate_passive, annotate_complex, calculate_level
+from typing import List, Optional
 
-app = FastAPI()
+from analyzer import analyze_text, rewrite_text
 
-class TextRequest(BaseModel):
+# --- Schemas --- #
+
+class AnalyzeRequest(BaseModel):
     text: str
 
 class AnalyzeResponse(BaseModel):
+    paragraphs: int
+    sentences: int
+    words: int
+    letters: int
+    adverbs: int
+    passive: int
+    complex: int
+    qualifiers: int
     readability_score: float
-    adverb_count: int
-    passive_voice_count: int
-    complex_count: int
-    hard_sentences: int
-    very_hard_sentences: int
 
-@app.post('/analyze', response_model=AnalyzeResponse)
-def analyze(req: TextRequest):
-    result = AnalysisResult()
-    paragraphs = req.text.split('\n')
-    result.paragraphs = len(paragraphs)
-    for para in paragraphs:
-        sentences = get_sentences(para)
-        result.sentences += len(sentences)
-        for sent in sentences:
-            # strip punctuation and count letters/words for readability
-            clean = re.sub(r'[^a-zA-Z0-9 ]', '', sent)
-            words = len(clean.split())
-            letters = len(clean.replace(' ', ''))
-            result.words += words
-            lvl = calculate_level(letters, words, 1)
-            if words >= 14 and 10 <= lvl < 14:
-                result.hardSentences += 1
-            elif words >= 14 and lvl >= 14:
-                result.veryHardSentences += 1
-            # count features
-            _, result.adverbs = annotate_adverbs(sent, result)
-            _, result.passiveVoice = annotate_passive(sent, result)
-            _, result.complex = annotate_complex(sent, result)
-    readability = round(4.71 * (result.words / result.sentences) + 0.5 * (result.words / result.sentences) - 21.43, 2)
-    return AnalyzeResponse(
-        readability_score=readability,
-        adverb_count=result.adverbs,
-        passive_voice_count=result.passiveVoice,
-        complex_count=result.complex,
-        hard_sentences=result.hardSentences,
-        very_hard_sentences=result.veryHardSentences
-    )
+class Suggestion(BaseModel):
+    offset: Optional[int]
+    length: int
+    type: str
+    suggestion: str
+
+class SuggestResponse(BaseModel):
+    suggestions: List[Suggestion]
+
+class RewriteRequest(BaseModel):
+    text: str
+
+class RewriteResponse(BaseModel):
+    rewritten_text: str
+
+# --- App Initialization --- #
+
+app = FastAPI(
+    title="Hemingway-like API",
+    description="API for text readability analysis, style suggestions, and simple rewrite",
+    version="1.0.0"
+)
+
+# --- Endpoints --- #
+
+@app.post("/analyze", response_model=AnalyzeResponse)
+def analyze(req: AnalyzeRequest):
+    """
+    Analyze the given text and return readability metrics.
+    """
+    metrics, _ = analyze_text(req.text)
+    return metrics
+
+@app.post("/suggest", response_model=SuggestResponse)
+def suggest(req: AnalyzeRequest):
+    """
+    Analyze the text and return a list of style suggestions
+    such as adverbs, passive voice, complex phrases, and qualifiers.
+    """
+    _, suggestions = analyze_text(req.text)
+    return {"suggestions": suggestions}
+
+@app.post("/rewrite", response_model=RewriteResponse)
+def rewrite(req: RewriteRequest):
+    """
+    Perform a simple rewrite by applying the first-pass
+    simplifications: removing adverbs, converting passive voice,
+    replacing one complex phrase, and removing qualifiers.
+    """
+    rewritten = rewrite_text(req.text)
+    return {"rewritten_text": rewritten}

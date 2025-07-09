@@ -1,120 +1,65 @@
-# Fake Hemingway API
+Lo siento, pero el lienzo no está disponible en este momento. Aquí tienes de nuevo el `README.md` en formato Markdown; puedes copiarlo directamente a tu repositorio:
 
-A RESTful API service that analyzes and suggests improvements for English text, inspired by Hemingway Editor. Built with FastAPI and containerized with Docker.
+```markdown
+# Hemingway-like API
 
-## Features
+A RESTful service that analyzes text readability, provides style suggestions (adverbs, passive voice, complex phrases, qualifiers), and offers a simple rewrite feature.
 
-* **Analyze** reading difficulty metrics: readability score, hard/very-hard sentences, adverb count, passive voice count, complex phrase count.
-* **Suggest** specific improvements (planned).
-* **Rewrite** text based on a target style (planned).
-* **Lightweight** with no external dependencies beyond requirements.
+## 🚀 Features
 
-## Project Structure
+- **/analyze**  
+  Returns counts of paragraphs, sentences, words, letters, adverbs, passive constructions, complex phrases, qualifiers, and a readability score.
+- **/suggest**  
+  Returns a list of style suggestions: spans flagged as adverb, passive voice, complex phrase, or qualifier.
+- **/rewrite**  
+  Applies first-pass simplifications: removes adverbs and qualifiers, converts passive → active prompts, replaces one complex phrase.
+
+## 📁 Project Structure
 
 ```
-fake-hemingway-api/
-├── app/
-│   ├── main.py           # FastAPI application with endpoints
-│   ├── analyzer.py       # Core analysis logic ported from JS
-│   └── schemas.py        # Pydantic models for request/response
-├── tests/
-│   └── test_api.py       # Unit tests using pytest
-├── Dockerfile            # Docker image definition
-├── requirements.txt      # Python dependencies
-└── README.md             # Project documentation
-```
 
-## Requirements
+hemingway-api/
+├── analyzer.py         # Core analysis & rewrite logic
+├── main.py             # FastAPI application & endpoints
+├── schemas.py          # Pydantic request/response models
+├── test\_api.py         # pytest test suite
+├── requirements.txt    # Python dependencies
+├── Dockerfile          # Docker container definition
+└── README.md           # This documentation
 
-* Python 3.8+
-* Docker (for containerized deployment)
+````
 
-## Installation & Local Development
+## 🔧 Requirements
 
-1. **Clone the repository**:
+- Python 3.11+
+- pip
+- (Optionally) Docker & Docker Compose
+- pytest (for running tests)
+
+## 💻 Local Setup
+
+1. **Clone repository & enter directory**  
+   ```bash
+   git clone https://github.com/yourusername/hemingway-api.git
+   cd hemingway-api
+````
+
+2. **Create and activate a virtual environment**
 
    ```bash
-   git clone https://github.com/your-org/fake-hemingway-api.git
-   cd fake-hemingway-api
+   python3 -m venv .venv
+   source .venv/bin/activate
    ```
 
-2. **Set up a virtual environment** (optional but recommended):
-
-   ```bash
-   python -m venv venv
-   source venv/bin/activate
-   ```
-
-3. **Install dependencies**:
+3. **Install dependencies**
 
    ```bash
    pip install --upgrade pip
    pip install -r requirements.txt
    ```
 
-4. **Run tests**:
+4. **Run the API server**
 
    ```bash
-   pytest
+   uvicorn main:
    ```
-
-5. **Start the server**:
-
-   ```bash
-   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-   ```
-
-Access the API documentation at [http://localhost:8000/docs](http://localhost:8000/docs).
-
-## Docker Deployment
-
-Build and run with Docker:
-
-```bash
-docker build -t fake-hemingway-api .
-docker run --rm -p 8000:8000 fake-hemingway-api
-```
-
-Your API is available at `http://localhost:8000`.
-
-## API Endpoints
-
-### Analyze Text
-
-* **URL**: `/analyze`
-* **Method**: `POST`
-* **Request Body**:
-
-  ```json
-  {
-    "text": "Your text to analyze"
-  }
-  ```
-* **Response**:
-
-  ```json
-  {
-    "readability_score": 8.23,
-    "adverb_count": 2,
-    "passive_voice_count": 1,
-    "complex_count": 3,
-    "hard_sentences": 0,
-    "very_hard_sentences": 0
-  }
-  ```
-
-*Future endpoints for `/suggest` and `/rewrite` will follow similar patterns.*
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository.
-2. Create a feature branch: `git checkout -b feature/YourFeature`.
-3. Commit your changes: `git commit -m 'Add YourFeature'`.
-4. Push to the branch: `git push origin feature/YourFeature`.
-5. Open a Pull Request.
-
-## License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
