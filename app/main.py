@@ -15,12 +15,6 @@ from .schemas import (
     Suggestion
 )
 
-app = FastAPI(
-    title="Hemingway-like API",
-    description="API for text readability analysis, style suggestions, and simple rewrite",
-    version="1.0.0"
-)
-
 # --- Schemas --- #
 
 class AnalyzeRequest(BaseModel):
