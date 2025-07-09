@@ -1,6 +1,4 @@
-Lo siento, pero el lienzo no está disponible en este momento. Aquí tienes de nuevo el `README.md` en formato Markdown; puedes copiarlo directamente a tu repositorio:
 
-```markdown
 # Hemingway-like API
 
 A RESTful service that analyzes text readability, provides style suggestions (adverbs, passive voice, complex phrases, qualifiers), and offers a simple rewrite feature.
@@ -42,7 +40,6 @@ hemingway-api/
    ```bash
    git clone https://github.com/yourusername/hemingway-api.git
    cd hemingway-api
-````
 
 2. **Create and activate a virtual environment**
 
