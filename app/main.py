@@ -4,8 +4,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Optional
 
-from .analyzer import analyze_text, rewrite_text
-from .schemas import AnalyzeRequest, AnalyzeResponse, SuggestResponse, RewriteRequest, RewriteResponse
+from analyzer import analyze_text, rewrite_text
+from schemas import AnalyzeRequest, AnalyzeResponse, SuggestResponse, RewriteRequest, RewriteResponse
 
 # --- Schemas --- #
 
