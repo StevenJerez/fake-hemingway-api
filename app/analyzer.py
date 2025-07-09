@@ -2,6 +2,7 @@
 
 import re
 from typing import List, Dict, Tuple
+import textstat
 
 def get_ly_words() -> set:
     """
@@ -267,7 +268,6 @@ def analyze_text(text: str) -> Tuple[dict, List[dict]]:
         "paragraphs": text.count("\n") + 1,
         "sentences": 0,
         "words": 0,
-        "letters": 0,
         "adverbs": 0,
         "passive": 0,
         "complex": 0,
@@ -337,11 +337,8 @@ def analyze_text(text: str) -> Tuple[dict, List[dict]]:
                         "suggestion": f"Consider removing qualifier '{qualifier}'"
                     })
 
-    data["readability_score"] = round(
-        206.835 - 1.015 * (data["words"] / data["sentences"] if data["sentences"] else 0)
-        - 84.6 * (data["letters"] / data["words"] if data["words"] else 0),
-        2
-    )
+    # Calculate a proper Flesch Reading Ease score using textstat
+    data["readability_score"] = round(textstat.flesch_reading_ease(text), 2)
 
     return data, suggestions
 
