@@ -287,7 +287,6 @@ def analyze_text(text: str) -> Tuple[dict, List[dict]]:
             clean = re.sub(r'[^A-Za-z0-9 ]', "", sent)
             words = clean.split()
             data["words"] += len(words)
-            data["letters"] += sum(len(w) for w in words)
 
             # detect adverbs
             for w in words:
