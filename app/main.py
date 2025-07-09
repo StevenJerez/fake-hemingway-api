@@ -4,8 +4,22 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Optional
 
-from analyzer import analyze_text, rewrite_text
-from schemas import AnalyzeRequest, AnalyzeResponse, SuggestResponse, RewriteRequest, RewriteResponse
+# Use relative imports now that app/ is a package
+from .analyzer import analyze_text, rewrite_text
+from .schemas import (
+    AnalyzeRequest,
+    AnalyzeResponse,
+    SuggestResponse,
+    RewriteRequest,
+    RewriteResponse,
+    Suggestion
+)
+
+app = FastAPI(
+    title="Hemingway-like API",
+    description="API for text readability analysis, style suggestions, and simple rewrite",
+    version="1.0.0"
+)
 
 # --- Schemas --- #
 
