@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Optional
 
-from analyzer import analyze_text, rewrite_text
+from app.analyzer import analyze_text, rewrite_text
 
 # --- Schemas --- #
 
