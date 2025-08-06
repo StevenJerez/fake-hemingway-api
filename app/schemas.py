@@ -16,6 +16,7 @@ class AnalyzeResponse(BaseModel):
     paragraphs: int
     sentences: int
     words: int
+    characters: int
     adverbs: int
     passive: int
     complex: int

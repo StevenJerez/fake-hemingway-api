@@ -268,6 +268,7 @@ def analyze_text(text: str) -> Tuple[dict, List[dict]]:
         "paragraphs": text.count("\n") + 1,
         "sentences": 0,
         "words": 0,
+        "characters": len(text),
         "adverbs": 0,
         "passive": 0,
         "complex": 0,
